@@ -12,12 +12,6 @@ type vm_error = StackSize
 
 exception VM_ERROR of vm_error
 
-type vm_state = {
-  program : opcode array;
-  mutable stack : stack;
-  mutable pc : int;
-}
-
 let string_of_stack_obj = function
   | SO_INT i -> string_of_int i
 
@@ -32,21 +26,22 @@ let pop = function
   | head :: stack -> (head, stack)
   | _ -> raise (VM_ERROR StackSize)
 
-let run_program vm =
-  let len = Array.length(vm.program) in
-  while vm.pc < len do
-    match vm.program.(vm.pc) with
-    | OP_PUSH obj ->
-        vm.stack <- obj :: vm.stack;
-        vm.pc <- vm.pc + 1;
-    | OP_ADD ->
-        let (a, s) = pop vm.stack in
-        let (b, s') = pop s in
-        vm.stack <- add a b :: s';
-        vm.pc <- vm.pc + 1;
-    | OP_PRINT ->
-        let (a, stack) = pop vm.stack in
-        print_obj a;
-        vm.stack <- stack;
-        vm.pc <- vm.pc + 1;
-  done
+let run_program program =
+  let len = Array.length(program) in
+  let rec loop pc stack =
+    if pc < len then
+      match program.(pc) with
+      | OP_PUSH obj ->
+          loop (pc + 1) (obj :: stack)
+      | OP_ADD ->
+          let (l, s)  = pop stack in
+          let (r, s') = pop s in
+          loop (pc + 1) (add l r :: s')
+      | OP_PRINT ->
+          let (obj, s) = pop stack in
+          print_obj obj;
+          loop (pc + 1) s
+    else
+      ()
+  in
+  loop 0 []
