@@ -15,9 +15,8 @@ type opcode =
 type program = opcode array
 
 type vm_state = {
-  stack : stack ref;
+  mutable stack : stack;
   program : program;
-  counter : int ref;
+  mutable counter : int;
 }
 
-let run_program () = print_endline "ok"
