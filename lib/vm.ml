@@ -6,9 +6,9 @@ type stack = stack_obj list
 
 type opcode =
   | OP_PUSH of stack_obj
+  | OP_PRINT
   | OP_AND
   | OP_ADD
-  | OP_PRINT
 
 type vm_error = StackSize | ArgumentType
 
@@ -18,7 +18,7 @@ let string_of_stack_obj = function
   | SO_BOOL b -> string_of_bool b
   | SO_INT i -> string_of_int i
 
-let print_obj obj =
+let print_op obj =
   print_endline (string_of_stack_obj obj)
 
 let and_op left right =
@@ -55,7 +55,7 @@ let run_program program =
           loop (pc + 1) (add_op l r :: s)
       | OP_PRINT ->
           let (obj, s) = pop stack in
-          print_obj obj;
+          print_op obj;
           loop (pc + 1) s
     else
       ()
