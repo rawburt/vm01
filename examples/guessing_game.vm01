@@ -7,7 +7,9 @@ push 2147483648
 mod
 
 loop:
-print "guess a number: "
+push "guess a number: "
+print
+pop
 get
 toi
 eq
@@ -16,14 +18,17 @@ pop
 lt
 je less
 pop
-print "guess higher"
+push "guess higher"
+print
+pop
 jmp loop
 
 less:
-print "guess lower"
+push "guess lower"
+print
 pop
 jmp loop
 
 done:
-print "you guessed it!"
-
+push "you guessed it!"
+print
