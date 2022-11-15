@@ -1,0 +1,4 @@
+(executable
+  (name vm01)
+  (libraries vm01)
+  )
