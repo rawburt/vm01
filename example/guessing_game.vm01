@@ -1,0 +1,29 @@
+time
+push 1103515245
+mul
+push 12345
+mul
+push 2147483648
+mod
+
+loop:
+print "guess a number: "
+get
+toi
+eq
+je done
+pop
+lt
+je less
+pop
+print "guess higher"
+jmp loop
+
+less:
+print "guess lower"
+pop
+jmp loop
+
+done:
+print "you guessed it!"
+
