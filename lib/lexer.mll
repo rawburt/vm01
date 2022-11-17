@@ -13,8 +13,6 @@ rule read =
   parse
   | '\n'+ { NEWLINE }
   | white { read lexbuf }
-  | "true" { TRUE }
-  | "false" { FALSE }
   | label { LABEL (Lexing.lexeme lexbuf) }
   | id { INSTRUCTION (Lexing.lexeme lexbuf) }
   | int { INT (int_of_string (Lexing.lexeme lexbuf)) }

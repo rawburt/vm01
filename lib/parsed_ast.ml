@@ -1,7 +1,25 @@
-type p_val =
-  | PValInt of int
-  | PValBool of bool
+type value =
+  | Int of int
+  | Bool of bool
+  [@@deriving show]
 
-type p_ast =
-  | PAstLabel of string
-  | PAstInstruction of string * p_val option
+type label = Label of string
+[@@deriving show]
+
+type arg = 
+  | ArgLabel of label 
+  | ArgVal of value
+  [@@deriving show]
+
+type instruction = 
+  | BasicInstruction of string 
+  | ArgInstruction of string * arg
+  [@@deriving show]
+
+type ast = 
+  | AstLabel of label 
+  | AstInstruction of instruction
+  [@@deriving show]
+
+type parsed_program = ast list
+[@@deriving show]

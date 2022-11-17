@@ -5,12 +5,10 @@
 %token <int> INT
 %token <string> LABEL
 %token <string> INSTRUCTION
-%token TRUE
-%token FALSE
 %token NEWLINE
 %token EOF
 
-%start <Parsed_ast.p_ast list> prog
+%start <Parsed_ast.parsed_program> prog
 %%
 
 prog:
@@ -23,13 +21,20 @@ expression_list:
   ;
 
 expression:
-  | l = LABEL { PAstLabel l }
-  | i = INSTRUCTION; v = value { PAstInstruction (i, Some (v)) }
-  | i = INSTRUCTION { PAstInstruction (i, None) }
+  | l = label { AstLabel l }
+  | i = INSTRUCTION; v = instruction_value { AstInstruction (ArgInstruction (i, v)) }
+  | i = INSTRUCTION { AstInstruction (BasicInstruction i) }
+  ;
+
+instruction_value:
+  | l = label { ArgLabel l }
+  | v = value { ArgVal v }
+  ;
+
+label:
+  | l = LABEL { Label l }
   ;
 
 value:
-  | i = INT { PValInt i }
-  | TRUE { PValBool true }
-  | FALSE { PValBool false }
+  | i = INT { Int i }
   ;
