@@ -13,7 +13,21 @@ let speclist = [
   ("-ast", Arg.Set config.ast, "Output parsed AST");
 ]
 
+let readfile filename =
+  let lines = ref "" in
+  let chan = open_in filename in
+  try
+    while true do
+      lines := input_line chan ^ "\n" ^ !lines
+    done; !lines
+  with End_of_file -> close_in chan; !lines
+
 let () =
   Arg.parse speclist anon_fun usage_msg;
-  print_endline "ok"
+  let file_contents = readfile config.infile in
+  let parsed = Vm01.parse file_contents in
+  if !(config.ast) then
+    Vm01.Parsed_ast.show_parsed_program parsed |> print_endline
+  else
+    print_endline "ok"
 

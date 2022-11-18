@@ -16,6 +16,7 @@ prog:
 word_list:
   | w = word { [w] }
   | w = word; NEWLINE; ws = word_list { w :: ws }
+  | w = word; NEWLINE { [w] }
   ;
 
 word:
