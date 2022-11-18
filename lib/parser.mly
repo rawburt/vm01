@@ -4,18 +4,17 @@
 
 %token <string> WORD
 %token <int> INT
-%token NEWLINE
 %token COLON
 %token EOF
 
 %type <ast> line label instruction
 %type <arg> arg
 
-%start <parsed_program> prog
+%start <ast> prog
 %%
 
 prog:
-  | NEWLINE* separated_nonempty_list(NEWLINE+, line) EOF { $2 }
+  | line EOF { $1 }
   ;
 line:
   | label { $1 }
