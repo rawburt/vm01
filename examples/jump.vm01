@@ -1,0 +1,6 @@
+loop:
+get
+toint
+push 4
+gt
+jumpif loop

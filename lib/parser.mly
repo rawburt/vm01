@@ -3,23 +3,31 @@
 %}
 
 %token <string> WORD
-%token NEWLINE
+%token <int> INT
+%token COLON
 %token EOF
 
 %start <Parsed_ast.parsed_program> prog
 %%
 
 prog:
-  | w = word_list; EOF { w }
+  | list(line) EOF { $1 }
   ;
 
-word_list:
-  | w = word { [w] }
-  | w = word; NEWLINE; ws = word_list { w :: ws }
-  | w = word; NEWLINE { [w] }
+line:
+  | instruction { $1 }
+  | label { $1 }
   ;
 
-word:
-  | i = WORD { Instruction i }
+instruction:
+  | WORD { Instruction ($1, None) }
+  | WORD arg { Instruction ($1, Some $2) }
   ;
 
+arg:
+  | INT { ArgInt $1 }
+  ;
+
+label:
+  | WORD COLON { Label $1 }
+  ;

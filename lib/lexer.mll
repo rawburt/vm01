@@ -2,16 +2,14 @@
   open Parser
 }
 
-let white = [' ' '\t']+
-let digit = ['0'-'9']
-let newline = '\r' | '\n' | "\r\n"
-let int = '-'? digit+
-let letter = ['a'-'z' 'A'-'Z']
-let id = letter+
+let word = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9']* 
 
 rule read =
   parse
-  | newline+ { NEWLINE }
-  | white { read lexbuf }
-  | id { WORD (Lexing.lexeme lexbuf) }
+  | "#" [^'\n']* '\n' { Lexing.new_line lexbuf; read lexbuf }
+  | '\n'+ { Lexing.new_line lexbuf; read lexbuf }
+  | [' ' '\t'] { read lexbuf }
+  | ':' { COLON }
+  | ['0'-'9']+ { INT (int_of_string (Lexing.lexeme lexbuf)) }
+  | word { WORD (Lexing.lexeme lexbuf) }
   | eof { EOF }

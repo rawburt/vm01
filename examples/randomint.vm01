@@ -1,6 +1,0 @@
-time
-dup
-push 13
-shr
-xor
-print
