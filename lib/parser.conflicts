@@ -1,31 +1,26 @@
 
-** Conflict (shift/reduce) in state 5.
-** Token involved: WORD
+** Conflict (shift/reduce) in state 13.
+** Token involved: NEWLINE
 ** This state is reached from prog after reading:
 
-list(NEWLINE) WORD
+list(NEWLINE) line
 
 ** The derivations that appear below have the following common factor:
 ** (The question mark symbol (?) represents the spot where the derivations begin to differ.)
 
 prog 
-list(NEWLINE) separated_nonempty_list(list(NEWLINE),line) EOF 
-              (?)
+(?)
 
-** In state 5, looking ahead at WORD, shifting is permitted
+** In state 13, looking ahead at NEWLINE, shifting is permitted
 ** because of the following sub-derivation:
 
-line 
-instruction 
-WORD option(arg) 
-     arg 
-     . WORD 
+list(NEWLINE) separated_nonempty_list(nonempty_list(NEWLINE),line) list(NEWLINE) EOF 
+              line nonempty_list(NEWLINE) separated_nonempty_list(nonempty_list(NEWLINE),line) 
+                   . NEWLINE 
 
-** In state 5, looking ahead at WORD, reducing production
-** option(arg) ->
+** In state 13, looking ahead at NEWLINE, reducing production
+** separated_nonempty_list(nonempty_list(NEWLINE),line) -> line
 ** is permitted because of the following sub-derivation:
 
-line list(NEWLINE) separated_nonempty_list(list(NEWLINE),line) // lookahead token appears because list(NEWLINE) can vanish and separated_nonempty_list(list(NEWLINE),line) can begin with WORD
-instruction // lookahead token is inherited
-WORD option(arg) // lookahead token is inherited
-     . 
+list(NEWLINE) separated_nonempty_list(nonempty_list(NEWLINE),line) list(NEWLINE) EOF // lookahead token appears because list(NEWLINE) can begin with NEWLINE
+              line . 

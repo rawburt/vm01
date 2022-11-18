@@ -15,7 +15,7 @@
 %%
 
 prog:
-  | NEWLINE* l=separated_nonempty_list(NEWLINE*, line) EOF { l }
+  | NEWLINE* separated_nonempty_list(NEWLINE+, line) EOF { $2 }
   ;
 line:
   | label { $1 }
@@ -25,7 +25,8 @@ label:
   | WORD COLON { Label $1 }
   ;
 instruction:
-  | WORD a=option(arg) { Instruction ($1, a) }
+  | WORD arg { Instruction ($1, Some $2) }
+  | WORD { Instruction ($1, None) }
   ;
 arg:
   | INT { ArgInt $1 }
