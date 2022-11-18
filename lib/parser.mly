@@ -4,30 +4,30 @@
 
 %token <string> WORD
 %token <int> INT
+%token NEWLINE
 %token COLON
 %token EOF
 
-%start <Parsed_ast.parsed_program> prog
+%type <ast> line label instruction
+%type <arg> arg
+
+%start <parsed_program> prog
 %%
 
 prog:
-  | list(line) EOF { $1 }
+  | NEWLINE* l=separated_nonempty_list(NEWLINE*, line) EOF { l }
   ;
-
 line:
-  | instruction { $1 }
   | label { $1 }
+  | instruction { $1 }
   ;
-
-instruction:
-  | WORD { Instruction ($1, None) }
-  | WORD arg { Instruction ($1, Some $2) }
-  ;
-
-arg:
-  | INT { ArgInt $1 }
-  ;
-
 label:
   | WORD COLON { Label $1 }
+  ;
+instruction:
+  | WORD a=option(arg) { Instruction ($1, a) }
+  ;
+arg:
+  | INT { ArgInt $1 }
+  | WORD { ArgLabel $1 }
   ;

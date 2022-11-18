@@ -1,4 +1,6 @@
-type arg = ArgInt of int
+type arg = 
+  | ArgInt of int
+  | ArgLabel of string
 [@@deriving show]
 
 type ast = 
