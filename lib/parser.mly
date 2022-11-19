@@ -10,11 +10,12 @@
 %type <ast> line label instruction
 %type <arg> arg
 
-%start <ast> prog
+%start <ast option> prog
 %%
 
 prog:
-  | line EOF { $1 }
+  | line EOF { Some $1 }
+  | EOF { None }
   ;
 line:
   | label { $1 }

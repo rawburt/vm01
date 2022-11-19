@@ -1,0 +1,17 @@
+# generate a random number via xorshift
+
+time
+dup
+push 13
+shl
+xor
+dup
+push 17
+shr
+xor
+dup
+push 5
+shl
+xor
+
+print

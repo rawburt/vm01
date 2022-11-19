@@ -17,8 +17,9 @@ let readfile filename =
   let chan = open_in filename in
   try
     while true do
-      let line = parse (input_line chan) in
-      program := line :: !program
+      match parse (input_line chan) with
+      | Some p -> program := p :: !program
+      | None -> ()
     done;
     finalize (!program)
   with End_of_file ->

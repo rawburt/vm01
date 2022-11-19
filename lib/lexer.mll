@@ -7,6 +7,7 @@ let word = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9']*
 rule read =
   parse
   | "#" [^'\n']* '\n' { Lexing.new_line lexbuf; read lexbuf }
+  | "#" [^'\n']* eof { EOF }
   | '\n'+ { Lexing.new_line lexbuf; read lexbuf }
   | [' ' '\t'] { read lexbuf }
   | ':' { COLON }
