@@ -1,7 +1,7 @@
 type arg = 
   | ArgInt of int
   | ArgLabel of string
-[@@deriving show]
+  [@@deriving show]
 
 type ast = 
   | Instruction of string * arg option
