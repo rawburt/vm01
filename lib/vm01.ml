@@ -1,4 +1,5 @@
 module Parsed_ast = Parsed_ast
+module Assemble = Assemble
 
 let parse s =
   let lexbuf = Lexing.from_string s in
