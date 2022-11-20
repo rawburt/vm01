@@ -1,5 +1,6 @@
 module Parsed_ast = Parsed_ast
 module Assemble = Assemble
+module Machine = Machine
 
 let parse s =
   let lexbuf = Lexing.from_string s in
@@ -12,7 +13,7 @@ let parse s =
     string_of_int (lexbuf.lex_curr_p.pos_cnum - lexbuf.lex_curr_p.pos_bol) |> print_endline;
     raise e
 
-let readfile filename =
+let read_file filename =
   let finalize p = List.rev(p) in
   let program = ref [] in
   let chan = open_in filename in
@@ -28,4 +29,9 @@ let readfile filename =
     finalize (!program)
 
 let parse_file file =
-  readfile file
+  read_file file
+
+let run_file debug file =
+  let p = parse_file file in
+  let program = Assemble.assemble p in
+  Machine.run debug program

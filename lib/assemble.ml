@@ -49,6 +49,7 @@ let mk_command = function
   | "xor" -> M.Xor
   | "shr" -> M.Shr
   | "shl" -> M.Shl
+  | "mod" -> M.Mod
   | _ as name -> raise (Assemble_error ("unknown instruction: " ^ name))
 
 let mk_instruction = function
@@ -65,4 +66,4 @@ let mk_instruction = function
 let assemble ast =
   let labels, ast' = extract_labels ast in
   let ast'' = replace_labels labels ast' in
-  List.map mk_instruction ast''
+  List.map mk_instruction ast'' |> List.to_seq |> Array.of_seq

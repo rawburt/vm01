@@ -1,4 +1,4 @@
-# generate a random number via xorshift
+# generate a random number between 0 and 100 via xorshift
 
 time
 dup
@@ -13,5 +13,8 @@ dup
 push 5
 shl
 xor
+
+push 100
+mod
 
 print
