@@ -37,6 +37,7 @@ let rec replace_labels labels = function
 let mk_value = function
   | P.ArgLabel _ -> raise (Assemble_error "unexpected label")
   | P.ArgInt i -> M.Int i
+  | P.ArgString s -> M.String s
 
 let mk_push = function
   | Some v -> M.Push (mk_value v)

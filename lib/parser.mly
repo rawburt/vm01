@@ -4,6 +4,7 @@
 
 %token <string> WORD
 %token <int> INT
+%token <string> STRING
 %token COLON
 %token EOF
 
@@ -31,4 +32,5 @@ instruction:
 arg:
   | INT { ArgInt $1 }
   | WORD { ArgLabel $1 }
+  | STRING { ArgString $1 }
   ;

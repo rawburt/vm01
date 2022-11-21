@@ -1,6 +1,7 @@
 (library
   (preprocess (pps ppx_deriving.show))
   (name vm01)
+  (libraries unix)
   )
 (ocamllex lexer)
 (menhir (modules parser))

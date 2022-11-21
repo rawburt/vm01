@@ -1,5 +1,6 @@
 type value =
   | Int of int
+  | String of string
   [@@deriving show]
 
 type instruction =
@@ -15,6 +16,7 @@ type instruction =
 
 let string_of_value = function
   | Int i -> string_of_int i
+  | String s -> s
 
 let print_value value =
   print_string (string_of_value value)
@@ -23,23 +25,28 @@ let time_op () =
   let time = Unix.time () in
   Int (int_of_float time)
 
+exception Runtime_error of string
+
 let xor_op a b =
   match a, b with
   | Int l, Int r -> Int (Int.logxor r l)
+  | _ -> raise (Runtime_error "type error for xor")
 
 let shr_op a b =
   match a, b with
   | Int l, Int r -> Int (Int.shift_right r l)
+  | _ -> raise (Runtime_error "type error for shr")
 
 let shl_op a b =
   match a, b with
   | Int l, Int r -> Int (Int.shift_left r l)
+  | _ -> raise (Runtime_error "type error for shl")
 
 let mod_op a b =
   match a, b with
   | Int l, Int r -> Int (r mod l)
+  | _ -> raise (Runtime_error "type error for mod")
 
-exception Runtime_error of string
 
 let pop = function
   | head :: rest -> (head, rest)

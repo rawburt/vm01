@@ -15,9 +15,9 @@ let speclist = [
 
 let () =
   Arg.parse speclist anon_fun usage_msg;
-  let parsed = Vm01.parse_file config.infile in
   if !(config.ast) then
+    let parsed = Vm01.parse_file config.infile in
     Vm01.Parsed_ast.show_parsed_program parsed |> print_endline
   else
-    print_endline "ok"
+    Vm01.run_file false config.infile
 
