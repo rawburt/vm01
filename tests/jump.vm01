@@ -1,5 +1,5 @@
 loop:
-get
+input
 toint
 push 4
 gt
