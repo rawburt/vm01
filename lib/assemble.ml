@@ -64,11 +64,13 @@ let mk_command = function
   | "time" -> M.Time
   | "dup" -> M.Dup
   | "over" -> M.Over
+  | "swap" -> M.Swap
   | "print" -> M.Print
   | "xor" -> M.Xor
   | "shr" -> M.Shr
   | "shl" -> M.Shl
   | "mod" -> M.Mod
+  | "add" -> M.Add
   | "input" -> M.Input
   | "toint" -> M.Toint
   | "lt" -> M.Lt

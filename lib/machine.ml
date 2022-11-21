@@ -10,11 +10,13 @@ type instruction =
   | Time
   | Dup
   | Over
+  | Swap
   | Print
   | Xor
   | Shr
   | Shl
   | Mod
+  | Add
   | Input
   | Toint
   | Lt
@@ -58,6 +60,11 @@ let mod_op a b =
   | Int l, Int r -> Int (r mod l)
   | _ -> raise (Runtime_error "type error for mod")
 
+let add_op a b =
+  match a, b with
+  | Int l, Int r -> Int (r + l)
+  | _ -> raise (Runtime_error "type error for add")
+
 let toint_op = function
   | Int i -> Int i
   | String s -> begin
@@ -88,15 +95,16 @@ let binop f stack =
   let b, s' = pop s in
   (f a b :: s')
 
-let print_stack stack =
+let print_debug stack instruction =
   List.iter (fun i -> print_value i; print_string "\n") stack;
+  print_endline (show_instruction instruction);
   print_endline ""
 
 let run debug program =
   let len = Array.length(program) in
   let rec loop pc stack =
     if pc >= len then () else begin
-      if debug then print_stack stack else ();
+      if debug then print_debug stack program.(pc) else ();
       match program.(pc) with
       | Push v -> loop (pc + 1) (v :: stack)
       | Pop ->
@@ -110,6 +118,10 @@ let run debug program =
           let _, s = pop stack in
           let n2, _ = pop s in
           loop (pc + 1) (n2 :: stack)
+      | Swap ->
+          let n1, s = pop stack in
+          let n2, s' = pop s in
+          loop (pc + 1) (n2 :: n1 :: s')
       | Print ->
           let head, s = pop stack in
           print_value head;
@@ -118,6 +130,7 @@ let run debug program =
       | Shr -> loop (pc + 1) (binop shr_op stack)
       | Shl -> loop (pc + 1) (binop shl_op stack)
       | Mod -> loop (pc + 1) (binop mod_op stack)
+      | Add -> loop (pc + 1) (binop add_op stack)
       | Input ->
           let input = read_line () in
           loop (pc + 1) (String input :: stack)
