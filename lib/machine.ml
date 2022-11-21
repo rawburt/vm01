@@ -12,6 +12,8 @@ type instruction =
   | Shr
   | Shl
   | Mod
+  | Input
+  | Toint
   [@@deriving show]
 
 let string_of_value = function
@@ -47,6 +49,9 @@ let mod_op a b =
   | Int l, Int r -> Int (r mod l)
   | _ -> raise (Runtime_error "type error for mod")
 
+let toint_op = function
+  | Int i -> Int i
+  | String s -> try Int (int_of_string s) with Failure _ -> Int 0
 
 let pop = function
   | head :: rest -> (head, rest)
@@ -87,6 +92,12 @@ let run debug program =
           let a, s = pop stack in
           let b, s' = pop s in
           loop (pc + 1) (mod_op a b :: s')
+      | Input ->
+          let input = read_line () in
+          loop (pc + 1) (String input :: stack)
+      | Toint ->
+          let a, s = pop stack in
+          loop (pc + 1) (toint_op a :: s)
     end
   in
   loop 0 []

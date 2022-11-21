@@ -51,6 +51,8 @@ let mk_command = function
   | "shr" -> M.Shr
   | "shl" -> M.Shl
   | "mod" -> M.Mod
+  | "input" -> M.Input
+  | "toint" -> M.Toint
   | _ as name -> raise (Assemble_error ("unknown instruction: " ^ name))
 
 let mk_instruction = function
