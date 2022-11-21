@@ -3,14 +3,12 @@
 
   let string_buff = Buffer.create 256
 
-
   let char_for_backslash = function
     | 'n' -> '\010'
     | 'r' -> '\013'
     | 'b' -> '\008'
     | 't' -> '\009'
     | c   -> c
-
 }
 
 let word = ['a'-'z' 'A'-'Z'] ['a'-'z' 'A'-'Z' '0'-'9']*
