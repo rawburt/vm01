@@ -1,5 +1,4 @@
 # generate a random number between 0 and 100 via xorshift
-
 time
 dup
 push 13
@@ -13,9 +12,18 @@ dup
 push 5
 shl
 xor
-
 push 100
 mod
+
+# main loop for user guessing the number
+loop:
+dup
+push "guess a number: "
+print
+pop
+input
+toint
+lt
 
 print
 

@@ -44,6 +44,7 @@ let mk_push = function
   | None -> raise (Assemble_error "expected arg for instruction: push")
 
 let mk_command = function
+  | "pop" -> M.Pop
   | "time" -> M.Time
   | "dup" -> M.Dup
   | "print" -> M.Print
@@ -53,6 +54,7 @@ let mk_command = function
   | "mod" -> M.Mod
   | "input" -> M.Input
   | "toint" -> M.Toint
+  | "lt" -> M.Lt
   | _ as name -> raise (Assemble_error ("unknown instruction: " ^ name))
 
 let mk_instruction = function
