@@ -43,10 +43,27 @@ let mk_push = function
   | Some v -> M.Push (mk_value v)
   | None -> raise (Assemble_error "expected arg for instruction: push")
 
+let mk_jump = function
+  | Some v -> begin
+      match v with
+      | P.ArgInt i -> M.Jump i
+      | _ -> raise (Assemble_error "expected int for instruction: jump")
+  end
+  | None -> raise (Assemble_error "expected arg for instruction: jump")
+
+let mk_jumpif = function
+  | Some v -> begin
+      match v with
+      | P.ArgInt i -> M.Jumpif i
+      | _ -> raise (Assemble_error "expected int for instruction: jumpif")
+  end
+  | None -> raise (Assemble_error "expected arg for instruction: jumpif")
+
 let mk_command = function
   | "pop" -> M.Pop
   | "time" -> M.Time
   | "dup" -> M.Dup
+  | "over" -> M.Over
   | "print" -> M.Print
   | "xor" -> M.Xor
   | "shr" -> M.Shr
@@ -55,12 +72,16 @@ let mk_command = function
   | "input" -> M.Input
   | "toint" -> M.Toint
   | "lt" -> M.Lt
+  | "gt" -> M.Gt
+  | "eq" -> M.Eq
   | _ as name -> raise (Assemble_error ("unknown instruction: " ^ name))
 
 let mk_instruction = function
   | P.Instruction (name, arg) -> begin
       match name with
       | "push" -> mk_push arg
+      | "jump" -> mk_jump arg
+      | "jumpif" -> mk_jumpif arg
       | _ ->
           if Option.is_some arg
           then raise (Assemble_error ("unexpected arg for instruction: " ^ name))

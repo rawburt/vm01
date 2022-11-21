@@ -9,6 +9,7 @@ type instruction =
   | Pop
   | Time
   | Dup
+  | Over
   | Print
   | Xor
   | Shr
@@ -17,6 +18,10 @@ type instruction =
   | Input
   | Toint
   | Lt
+  | Gt
+  | Eq
+  | Jump of int
+  | Jumpif of int
   [@@deriving show]
 
 let string_of_value = function
@@ -67,6 +72,13 @@ let lt_op a b =
   | Int l, Int r -> Bool (l < r)
   | _ -> raise (Runtime_error "type error for lt")
 
+let gt_op a b =
+  match a, b with
+  | Int l, Int r -> Bool (l > r)
+  | _ -> raise (Runtime_error "type error for lt")
+
+let eq_op a b = Bool (a = b)
+
 let pop = function
   | head :: rest -> (head, rest)
   | [] -> raise (Runtime_error "stack is empty")
@@ -94,10 +106,14 @@ let run debug program =
       | Dup ->
           let head, _ = pop stack in
           loop (pc + 1) (head :: stack)
+      | Over ->
+          let _, s = pop stack in
+          let n2, _ = pop s in
+          loop (pc + 1) (n2 :: stack)
       | Print ->
-          let head, _ = pop stack in
+          let head, s = pop stack in
           print_value head;
-          loop (pc + 1) stack
+          loop (pc + 1) s;
       | Xor -> loop (pc + 1) (binop xor_op stack)
       | Shr -> loop (pc + 1) (binop shr_op stack)
       | Shl -> loop (pc + 1) (binop shl_op stack)
@@ -109,6 +125,16 @@ let run debug program =
           let a, s = pop stack in
           loop (pc + 1) (toint_op a :: s)
       | Lt -> loop (pc + 1) (binop lt_op stack)
+      | Gt -> loop (pc + 1) (binop gt_op stack)
+      | Eq -> loop (pc + 1) (binop eq_op stack)
+      | Jump i -> loop i stack
+      | Jumpif i -> begin
+          match stack with
+          | Bool b :: rest ->
+              let loc = if b then i else (pc + 1) in
+              loop loc rest
+          | _ -> raise (Runtime_error "type error for jumpif")
+      end
     end
   in
   loop 0 []

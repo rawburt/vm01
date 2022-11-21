@@ -20,12 +20,26 @@ loop:
 dup
 push "guess a number: "
 print
-pop
 input
 toint
+over
+over
+eq
+jumpif done
 lt
+jumpif less
+push "too high!\n"
+print
+jump loop
 
+less:
+push "too low!\n"
+print
+jump loop
+
+done:
+push "you win!\n"
 print
 
-push "\n"
-print
+
+# over, jumpif, jump
