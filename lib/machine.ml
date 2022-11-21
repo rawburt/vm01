@@ -57,6 +57,11 @@ let pop = function
   | head :: rest -> (head, rest)
   | [] -> raise (Runtime_error "stack is empty")
 
+let binop f stack =
+  let a, s = pop stack in
+  let b, s' = pop s in
+  (f a b :: s')
+
 let print_stack stack =
   List.iter (fun i -> print_value i; print_string "\n") stack;
   print_endline ""
@@ -76,22 +81,10 @@ let run debug program =
           let head, _ = pop stack in
           print_value head;
           loop (pc + 1) stack
-      | Xor ->
-          let a, s = pop stack in
-          let b, s' = pop s in
-          loop (pc + 1) (xor_op a b :: s')
-      | Shr ->
-          let a, s = pop stack in
-          let b, s' = pop s in
-          loop (pc + 1) (shr_op a b :: s')
-      | Shl ->
-          let a, s = pop stack in
-          let b, s' = pop s in
-          loop (pc + 1) (shl_op a b :: s')
-      | Mod ->
-          let a, s = pop stack in
-          let b, s' = pop s in
-          loop (pc + 1) (mod_op a b :: s')
+      | Xor -> loop (pc + 1) (binop xor_op stack)
+      | Shr -> loop (pc + 1) (binop shr_op stack)
+      | Shl -> loop (pc + 1) (binop shl_op stack)
+      | Mod -> loop (pc + 1) (binop mod_op stack)
       | Input ->
           let input = read_line () in
           loop (pc + 1) (String input :: stack)
