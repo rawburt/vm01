@@ -65,6 +65,7 @@ let mk_command = function
   | "dup" -> M.Dup
   | "over" -> M.Over
   | "swap" -> M.Swap
+  | "rot" -> M.Rot
   | "print" -> M.Print
   | "xor" -> M.Xor
   | "shr" -> M.Shr

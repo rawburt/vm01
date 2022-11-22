@@ -1,0 +1,44 @@
+# sum of even fib numbers under 4,000,000
+
+# sum
+push 0
+# fibs
+push 1
+push 2
+
+# if even then sum
+loop:
+dup
+push 2
+mod
+push 0
+eq
+jumpif sum
+jump next
+
+# add current fib to sum
+sum:
+rot
+swap
+dup
+rot
+add
+rot
+rot
+
+# find next fib item
+next:
+dup
+rot
+add
+# check if not over 4,000,000
+dup
+push 4000000
+gt
+jumpif loop
+
+# all done
+rot
+print
+push "\n"
+print

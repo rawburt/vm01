@@ -11,6 +11,7 @@ type instruction =
   | Dup
   | Over
   | Swap
+  | Rot
   | Print
   | Xor
   | Shr
@@ -122,6 +123,11 @@ let run debug program =
           let n1, s = pop stack in
           let n2, s' = pop s in
           loop (pc + 1) (n2 :: n1 :: s')
+      | Rot ->
+          let n1, s = pop stack in
+          let n2, s' = pop s in
+          let n3, s'' = pop s' in
+          loop (pc + 1) (n3 :: n1 :: n2 :: s'')
       | Print ->
           let head, s = pop stack in
           print_value head;
