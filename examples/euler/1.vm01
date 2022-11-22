@@ -18,7 +18,6 @@ mod
 push 0
 eq
 jumpif sum
-jump next
 
 next:
 push 1
